@@ -23,35 +23,13 @@ document.querySelectorAll('[data-scroll]').forEach((a) => {
 });
 
 /* ================================================================
-   HERO — frame sequence scrub
-   Frames live at assets/frames/hero/frame_XXXX.jpg (1-indexed, 4 pad)
-   assets/frames/hero/meta.json -> { "count": N }
-   Falls back to a lit gradient + still if no frames exist yet.
+   HERO — boot sequence
+   The ASCII data-sphere (backdrop.js) is the hero centerpiece;
+   the loader is a short cosmetic sweep, no assets to fetch.
    ================================================================ */
-const canvas = document.getElementById('heroCanvas');
-const ctx = canvas.getContext('2d');
 const loaderEl = document.getElementById('loader');
 const loaderFill = document.getElementById('loaderFill');
 const loaderPct = document.getElementById('loaderPct');
-
-const heroState = { frames: [], count: 0, current: 0, ready: false };
-
-function sizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.round(canvas.clientWidth * dpr);
-  canvas.height = Math.round(canvas.clientHeight * dpr);
-  drawFrame(heroState.current);
-}
-
-function drawFrame(i) {
-  const img = heroState.frames[i];
-  if (!img || !img.complete || !img.naturalWidth) return;
-  const cw = canvas.width, ch = canvas.height;
-  const iw = img.naturalWidth, ih = img.naturalHeight;
-  const scale = Math.max(cw / iw, ch / ih);
-  const w = iw * scale, h = ih * scale;
-  ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
-}
 
 function setLoader(p) {
   const pct = Math.round(p * 100);
@@ -65,54 +43,16 @@ function finishLoader() {
   introReveal();
 }
 
-async function loadHeroFrames() {
-  let meta = null;
-  try {
-    const res = await fetch('assets/frames/hero/meta.json', { cache: 'no-store' });
-    if (res.ok) meta = await res.json();
-  } catch (_) { /* no frames yet — fallback mode */ }
-
-  if (!meta || !meta.count) {
-    heroState.ready = false;
-    document.body.classList.add('no-frames');
-    gsap.set('.hero-content', { y: '-9vh' });
-    finishLoader();
-    return;
-  }
-
-  heroState.count = meta.count;
-  const pad = (n) => String(n).padStart(4, '0');
-  let loaded = 0;
-
-  const promises = [];
-  for (let i = 1; i <= meta.count; i++) {
-    const img = new Image();
-    img.src = `assets/frames/hero/frame_${pad(i)}.jpg`;
-    heroState.frames.push(img);
-    promises.push(
-      new Promise((resolve) => {
-        img.onload = img.onerror = () => {
-          loaded++;
-          setLoader(loaded / meta.count);
-          resolve();
-        };
-      })
-    );
-  }
-
-  // Reveal once the first quarter is in; keep loading the rest silently.
-  const firstQuarter = Math.max(1, Math.floor(meta.count / 4));
-  await Promise.all(promises.slice(0, firstQuarter));
-  heroState.ready = true;
-  sizeCanvas();
-  drawFrame(0);
-  finishLoader();
-  Promise.all(promises).then(() => drawFrame(heroState.current));
-}
-
-window.addEventListener('resize', sizeCanvas);
-sizeCanvas();
-loadHeroFrames();
+document.body.classList.add('no-frames');
+gsap.set('.hero-content', { y: '-9vh' });
+(function bootLoader() {
+  let p = 0;
+  const iv = setInterval(() => {
+    p = Math.min(1, p + 0.22 + Math.random() * 0.2);
+    setLoader(p);
+    if (p >= 1) { clearInterval(iv); finishLoader(); }
+  }, 110);
+})();
 
 /* ---------- Hero scrub + kinetic title ---------- */
 const letters = gsap.utils.toArray('.ht-letter');
@@ -139,18 +79,7 @@ ScrollTrigger.create({
   end: 'bottom bottom',
   scrub: 0.4,
   onUpdate: (self) => {
-    // Scrub the orbit
-    if (heroState.ready && heroState.count > 0) {
-      const idx = Math.min(
-        heroState.count - 1,
-        Math.floor(self.progress * (heroState.count - 1))
-      );
-      if (idx !== heroState.current) {
-        heroState.current = idx;
-        drawFrame(idx);
-      }
-    }
-    // Kinetic type: title drifts up & tightens as orbit proceeds
+    // Kinetic type: title drifts up & tightens as the dive proceeds
     const p = self.progress;
     gsap.set('.hero-content', {
       yPercent: -p * 26,
@@ -325,35 +254,6 @@ if (!prefersReduced) {
     tilts.forEach((el) => gsap.to(el, { x: nx * 20, y: ny * 14, duration: 0.9, ease: 'power2.out' }));
   }, { passive: true });
 }
-
-/* ================================================================
-   VIDEO playback management (play only when visible)
-   ================================================================ */
-function manageVideo(video, triggerEl, { fixed = false } = {}) {
-  if (!video) return;
-  ScrollTrigger.create({
-    trigger: triggerEl,
-    start: 'top bottom',
-    end: 'bottom top',
-    onToggle: (self) => {
-      if (self.isActive) {
-        video.play().catch(() => {});
-        if (fixed) {
-          video.classList.add('active');
-          document.querySelector('.work-shade')?.classList.add('active');
-        }
-      } else {
-        video.pause();
-        if (fixed) {
-          video.classList.remove('active');
-          document.querySelector('.work-shade')?.classList.remove('active');
-        }
-      }
-    },
-  });
-}
-manageVideo(document.getElementById('builderVideo'), '.pillars');
-manageVideo(document.getElementById('closerVideo'), '.work', { fixed: true });
 
 /* ================================================================
    WORK — card reveals + hover tilt
