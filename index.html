@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOHIT — AI Engineer · Data Scientist · IIT Roorkee</title>
+  <meta name="description" content="I architect AI agents that reason, match and execute — while you sleep. Data Scientist · AI Engineer · IIT Roorkee." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ LOADER ============ -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <span class="loader-label mono">MOHIT.SYS // INITIALIZING</span>
+      <div class="loader-bar"><div class="loader-bar-fill" id="loaderFill"></div></div>
+      <span class="loader-pct mono" id="loaderPct">0%</span>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a class="nav-logo" href="#hero" data-scroll>M<span class="accent">.</span></a>
+    <nav class="nav-links mono">
+      <a href="#stats" data-scroll>STATS</a>
+      <a href="#pillars" data-scroll>PILLARS</a>
+      <a href="#projects" data-scroll>PROJECTS</a>
+      <a href="#career" data-scroll>CAREER</a>
+      <a href="#finale" data-scroll>CONTACT</a>
+    </nav>
+    <div class="nav-status mono"><span class="status-dot"></span>OPEN TO WORK</div>
+  </header>
+
+  <!-- ============ HERO / ORBIT ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-sticky">
+      <canvas class="hero-canvas" id="heroCanvas"></canvas>
+      <canvas class="ascii-sphere" id="asciiSphere" aria-hidden="true"></canvas>
+      <div class="hero-vignette"></div>
+
+      <div class="hero-content">
+        <p class="hero-kicker mono reveal-line">DATA SCIENTIST · AI ENGINEER · IIT ROORKEE</p>
+        <h1 class="hero-title" id="heroTitle" aria-label="MOHIT">
+          <span class="ht-letter">M</span><span class="ht-letter">O</span><span class="ht-letter">H</span><span class="ht-letter">I</span><span class="ht-letter">T</span><span class="ht-reg accent">®</span>
+        </h1>
+        <p class="hero-sub">I architect AI agents that reason, match and execute — <em>while you sleep.</em></p>
+      </div>
+
+      <div class="hero-scrollcue mono">
+        <span>SCROLL TO ENTER</span>
+        <div class="scrollcue-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS / TELEMETRY DASHBOARD ============ -->
+  <section class="stats" id="stats">
+    <p class="section-label mono">STATISTICS</p>
+
+    <div class="dash-grid">
+
+      <!-- 01 · radial gauge — systems shipped -->
+      <article class="dcard">
+        <div class="dcard-head">
+          <span class="dcard-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+          <h3 class="dcard-title">Agent Systems</h3>
+          <span class="dcard-corner mono">2+ YRS</span>
+        </div>
+        <p class="dcard-sub">AI systems shipped end-to-end, running in production.</p>
+        <div class="dcard-viz">
+          <svg viewBox="0 0 220 220">
+            <g class="g-ticks" id="gaugeTicks"></g>
+            <path class="g-track" d="M 42.5 149 A 78 78 0 1 1 177.5 149"/>
+            <path class="g-val" id="gaugeVal" d="M 42.5 149 A 78 78 0 1 1 177.5 149"/>
+            <circle class="g-acc" cx="110" cy="110" r="84" pathLength="100" stroke-dasharray="12 88" stroke-dashoffset="-19" stroke-width="3"/>
+          </svg>
+          <div class="viz-center">
+            <span class="viz-num"><span class="count" data-target="6" data-suffix="">0</span></span>
+            <span class="viz-cap mono">SYSTEMS LIVE</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 02 · lollipop chart — model recall -->
+      <article class="dcard">
+        <div class="dcard-head">
+          <span class="dcard-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 9 h3 l2 -5 3 8 2 -5 h4"/></svg></span>
+          <h3 class="dcard-title">Model Recall</h3>
+          <span class="dcard-corner mono accent"><span class="count" data-target="92" data-suffix="%">0</span></span>
+        </div>
+        <p class="dcard-sub">Recall held on production ML models.</p>
+        <div class="dcard-viz">
+          <svg viewBox="0 0 320 180">
+            <line class="thresh" x1="20" y1="46" x2="300" y2="46"/>
+            <g id="lolliGroup">
+              <line class="lolli-stub" x1="60" y1="160" x2="60" y2="128"/>
+              <line class="lolli-stub" x1="100" y1="160" x2="100" y2="120"/>
+              <line class="lolli-stub" x1="140" y1="160" x2="140" y2="132"/>
+              <line class="lolli-stub" x1="180" y1="160" x2="180" y2="118"/>
+              <line class="lolli-stub" x1="220" y1="160" x2="220" y2="130"/>
+              <line class="lolli-stub" x1="260" y1="160" x2="260" y2="124"/>
+              <line class="lolli-stick" x1="40" y1="160" x2="40" y2="78"/>
+              <circle class="lolli-head" cx="40" cy="78" r="4"/>
+              <line class="lolli-stick" x1="80" y1="160" x2="80" y2="64"/>
+              <circle class="lolli-head" cx="80" cy="64" r="4"/>
+              <line class="lolli-stick" x1="120" y1="160" x2="120" y2="60"/>
+              <circle class="lolli-head" cx="120" cy="60" r="4"/>
+              <line class="lolli-stick" x1="160" y1="160" x2="160" y2="30"/>
+              <circle class="lolli-head hot" cx="160" cy="30" r="4.5"/>
+              <line class="lolli-stick" x1="200" y1="160" x2="200" y2="44"/>
+              <circle class="lolli-head" cx="200" cy="44" r="4"/>
+              <line class="lolli-stick" x1="240" y1="160" x2="240" y2="70"/>
+              <circle class="lolli-head" cx="240" cy="70" r="4"/>
+              <line class="lolli-stick" x1="280" y1="160" x2="280" y2="38"/>
+              <circle class="lolli-head" cx="280" cy="38" r="4"/>
+            </g>
+            <line class="baseline" x1="20" y1="160" x2="300" y2="160"/>
+            <rect class="thresh-chip" x="20" y="36" width="78" height="20" rx="3"/>
+            <text class="thresh-label" x="59" y="49.5" text-anchor="middle">TARGET 90%</text>
+          </svg>
+        </div>
+      </article>
+
+      <!-- 03 · speedometer — RAG latency -->
+      <article class="dcard">
+        <div class="dcard-head">
+          <span class="dcard-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 a 6 6 0 0 1 12 0"/><line x1="8" y1="12" x2="11.4" y2="8.2"/></svg></span>
+          <h3 class="dcard-title">RAG Latency</h3>
+          <span class="dcard-corner mono">LIVE</span>
+        </div>
+        <p class="dcard-sub">Latency slashed on live retrieval pipelines.</p>
+        <div class="dcard-viz">
+          <svg viewBox="0 0 240 140">
+            <g class="g-ticks" id="meterTicks"></g>
+            <path class="g-track" d="M 34 124 A 86 86 0 0 1 206 124"/>
+            <path class="g-val" id="meterVal" d="M 34 124 A 86 86 0 0 1 206 124"/>
+            <g id="needleWrap"><line class="needle" id="needle" x1="120" y1="124" x2="120" y2="56"/></g>
+            <circle class="needle-hub" cx="120" cy="124" r="7"/>
+          </svg>
+          <div class="viz-center viz-center-low">
+            <span class="viz-num"><span class="count" data-target="25" data-suffix="%">0</span></span>
+            <span class="viz-cap mono">LATENCY CUT</span>
+          </div>
+        </div>
+        <div class="meter-stats">
+          <div class="ms"><span class="ms-num">+35%</span><span class="ms-cap mono">RELEVANCE GAINS</span></div>
+          <div class="ms ms-right"><span class="ms-num">24/7</span><span class="ms-cap mono">AGENT UPTIME</span></div>
+        </div>
+      </article>
+
+      <!-- 04 · wide growth card — data corpus -->
+      <article class="dcard dcard-wide">
+        <div class="dcard-head">
+          <span class="dcard-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 12 L6 7 9 10 15 3"/><path d="M10 3 h5 v5"/></svg></span>
+          <h3 class="dcard-title">Data Corpus</h3>
+          <span class="dcard-corner mono">MULTIMODAL</span>
+        </div>
+        <div class="dw-grid">
+          <div class="dw-left">
+            <span class="viz-num viz-num-xl"><span class="count" data-target="56" data-suffix="K+">0</span></span>
+            <span class="viz-cap mono">RECORDS INDEXED</span>
+            <p class="dcard-foot mono">POWERING MULTIMODAL<br/>ANALYTICS PIPELINES.</p>
+          </div>
+          <div class="dw-chart dcard-dots">
+            <svg viewBox="0 0 640 220" preserveAspectRatio="none">
+              <path class="chart-line" id="chartLine" pathLength="1"
+                d="M 8 196 C 48 192, 64 168, 96 166 C 120 164, 138 178, 160 172 C 196 162, 210 118, 244 112 C 268 108, 286 132, 308 128 C 336 122, 352 78, 386 70 C 410 64, 430 92, 456 88 C 484 84, 502 60, 528 56 C 556 52, 580 74, 620 58"/>
+              <circle class="chart-dot" id="chartDot" cx="620" cy="58" r="4.5"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>AI AGENTS — RAG SYSTEMS — ML ENGINEERING — GEOSPATIAL INTELLIGENCE — MULTI-AGENT ORCHESTRATION — </span>
+      <span>AI AGENTS — RAG SYSTEMS — ML ENGINEERING — GEOSPATIAL INTELLIGENCE — MULTI-AGENT ORCHESTRATION — </span>
+    </div>
+  </div>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="pillars" id="pillars">
+    <div class="pillars-sticky">
+      <video class="bg-video" id="builderVideo" src="assets/video/builder.mp4" muted loop playsinline preload="metadata"></video>
+      <div class="bg-video-shade"></div>
+
+      <p class="section-label mono">THE PILLARS</p>
+
+      <div class="pillars-stage">
+        <article class="pillar" data-pillar="0">
+          <span class="pillar-index mono">01</span>
+          <h2 class="pillar-name">AGENT<br/>FORGE</h2>
+          <p class="pillar-desc">Multi-agent systems that orchestrate, decide, and execute.</p>
+          <p class="pillar-stack mono">LANGCHAIN · LANGGRAPH · CREWAI · AUTOGEN · LANGSMITH · FASTAPI · DOCKER</p>
+          <div class="pillar-icon" aria-hidden="true">
+            <div class="icon-tilt">
+            <svg viewBox="-105 -85 210 175" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <ellipse class="orbit" pathLength="100" cx="0.9" cy="-16.5" rx="97" ry="48"/>
+              <polygon class="plat" pathLength="1" points="36.4,-42.0 74.5,-20.0 36.4,2.0 -1.7,-20.0"/>
+              <polygon class="plat" pathLength="1" points="74.5,-16.0 36.4,6.0 36.4,2.0 74.5,-20.0"/>
+              <polygon class="plat" pathLength="1" points="-1.7,-16.0 36.4,6.0 36.4,2.0 -1.7,-20.0"/>
+              <polygon pathLength="1" points="36.4,-46.0 65.8,-29.0 36.4,-12.0 6.9,-29.0"/>
+              <polygon pathLength="1" points="65.8,-20.0 36.4,-3.0 36.4,-12.0 65.8,-29.0"/>
+              <polygon pathLength="1" points="6.9,-20.0 36.4,-3.0 36.4,-12.0 6.9,-29.0"/>
+              <polygon class="inner" pathLength="1" points="36.4,-41.0 57.2,-29.0 36.4,-17.0 15.6,-29.0"/>
+              <polygon class="plat" pathLength="1" points="31.2,15.0 69.3,37.0 31.2,59.0 -6.9,37.0"/>
+              <polygon class="plat" pathLength="1" points="69.3,41.0 31.2,63.0 31.2,59.0 69.3,37.0"/>
+              <polygon class="plat" pathLength="1" points="-6.9,41.0 31.2,63.0 31.2,59.0 -6.9,37.0"/>
+              <polygon pathLength="1" points="31.2,11.0 60.6,28.0 31.2,45.0 1.7,28.0"/>
+              <polygon pathLength="1" points="60.6,37.0 31.2,54.0 31.2,45.0 60.6,28.0"/>
+              <polygon pathLength="1" points="1.7,37.0 31.2,54.0 31.2,45.0 1.7,28.0"/>
+              <polygon class="inner" pathLength="1" points="31.2,16.0 52.0,28.0 31.2,40.0 10.4,28.0"/>
+              <polygon class="plat" pathLength="1" points="-64.1,-20.0 -26.0,2.0 -64.1,24.0 -102.2,2.0"/>
+              <polygon class="plat" pathLength="1" points="-26.0,6.0 -64.1,28.0 -64.1,24.0 -26.0,2.0"/>
+              <polygon class="plat" pathLength="1" points="-102.2,6.0 -64.1,28.0 -64.1,24.0 -102.2,2.0"/>
+              <polygon pathLength="1" points="-64.1,-24.0 -34.6,-7.0 -64.1,10.0 -93.5,-7.0"/>
+              <polygon pathLength="1" points="-34.6,2.0 -64.1,19.0 -64.1,10.0 -34.6,-7.0"/>
+              <polygon pathLength="1" points="-93.5,2.0 -64.1,19.0 -64.1,10.0 -93.5,-7.0"/>
+              <polygon class="inner" pathLength="1" points="-64.1,-19.0 -43.3,-7.0 -64.1,5.0 -84.9,-7.0"/>
+              <line pathLength="1" x1="32.0" y1="-33.5" x2="44.2" y2="-26.5"/>
+              <line pathLength="1" x1="26.8" y1="-30.5" x2="39.0" y2="-23.5"/>
+              <line pathLength="1" x1="26.8" y1="23.5" x2="39.0" y2="30.5"/>
+              <line pathLength="1" x1="21.7" y1="26.5" x2="33.8" y2="33.5"/>
+              <line pathLength="1" x1="-68.4" y1="-11.5" x2="-56.3" y2="-4.5"/>
+              <line pathLength="1" x1="-73.6" y1="-8.5" x2="-61.5" y2="-1.5"/>
+              <line pathLength="1" x1="36.4" y1="-29.0" x2="36.4" y2="-55.0"/>
+              <circle class="blink" cx="36.4" cy="-55.0" r="2.2"/>
+              <line class="dash" x1="36.4" y1="-29.0" x2="31.2" y2="28.0"/>
+              <line class="dash" x1="36.4" y1="-29.0" x2="-64.1" y2="-7.0"/>
+              <line class="dash" x1="31.2" y1="28.0" x2="-64.1" y2="-7.0"/>
+              <circle class="node" cx="36.4" cy="-29.0" r="2.6"/>
+              <circle class="node" cx="31.2" cy="28.0" r="2.6"/>
+              <circle class="node" cx="-64.1" cy="-7.0" r="2.6"/>
+            </svg>
+            </div>
+          </div>
+        </article>
+        <article class="pillar" data-pillar="1">
+          <span class="pillar-index mono">02</span>
+          <h2 class="pillar-name">RETRIEVAL<br/>CORE</h2>
+          <p class="pillar-desc">RAG architectures that ground LLMs in truth.</p>
+          <p class="pillar-stack mono">FAISS · CHROMADB · LLAMAINDEX · HYBRID RAG · LLM EVALUATION · 35% RELEVANCE GAINS</p>
+          <div class="pillar-icon" aria-hidden="true">
+            <div class="icon-tilt">
+            <svg viewBox="-92 -72 200 165" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <ellipse class="ping" cx="-14" cy="0" rx="32" ry="16"/>
+              <line pathLength="1" x1="-79" y1="-34" x2="-79" y2="-8"/>
+              <line pathLength="1" x1="-49" y1="-34" x2="-49" y2="-8"/>
+              <ellipse pathLength="1" cx="-64" cy="-34" rx="15" ry="7.5"/>
+              <path pathLength="1" d="M -79 -8 A 15 7.5 0 0 0 -49 -8"/>
+              <line pathLength="1" x1="-46" y1="0" x2="-46" y2="56"/>
+              <line pathLength="1" x1="18" y1="0" x2="18" y2="56"/>
+              <ellipse pathLength="1" cx="-14" cy="0" rx="32" ry="16"/>
+              <ellipse class="inner" pathLength="1" cx="-14" cy="0" rx="24" ry="12"/>
+              <path pathLength="1" d="M -46 20 A 32 16 0 0 0 18 20"/>
+              <path pathLength="1" d="M -46 40 A 32 16 0 0 0 18 40"/>
+              <path pathLength="1" d="M -46 56 A 32 16 0 0 0 18 56"/>
+              <circle class="node" cx="8" cy="20.5" r="1.8"/>
+              <circle class="node" cx="8" cy="40.5" r="1.8"/>
+              <circle class="node" cx="8" cy="60.5" r="1.8"/>
+              <polygon class="ghost" pathLength="1" points="62.4,-62.0 27.7,-42.0 27.7,14.0 62.4,-6.0"/>
+              <polygon pathLength="1" points="55.4,-60.0 20.8,-40.0 20.8,16.0 55.4,-4.0"/>
+              <line class="acc" pathLength="1" x1="51.1" y1="-41.5" x2="25.1" y2="-26.5"/>
+              <line pathLength="1" x1="51.1" y1="-31.5" x2="34.6" y2="-22.0"/>
+              <line pathLength="1" x1="51.1" y1="-21.5" x2="25.1" y2="-6.5"/>
+              <line class="dash" x1="20.8" y1="14.0" x2="2.0" y2="8.0"/>
+            </svg>
+            </div>
+          </div>
+        </article>
+        <article class="pillar" data-pillar="2">
+          <span class="pillar-index mono">03</span>
+          <h2 class="pillar-name">PREDICTION<br/>ENGINE</h2>
+          <p class="pillar-desc">ML models that see risk before it happens.</p>
+          <p class="pillar-stack mono">XGBOOST · PYTORCH · SCIKIT-LEARN · OPTUNA · SHAP · SMOTE · 0.88 ROC-AUC</p>
+          <div class="pillar-icon" aria-hidden="true">
+            <div class="icon-tilt">
+            <svg viewBox="-50 -88 178 180" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <polygon class="plat" pathLength="1" points="0.0,-16.0 117.8,52.0 74.5,77.0 -43.3,9.0"/>
+              <polygon class="plat" pathLength="1" points="117.8,57.0 74.5,82.0 74.5,77.0 117.8,52.0"/>
+              <polygon class="plat" pathLength="1" points="-43.3,14.0 74.5,82.0 74.5,77.0 -43.3,9.0"/>
+              <line class="grid" pathLength="1" x1="17.3" y1="-4.0" x2="-22.5" y2="19.0"/>
+              <line class="grid" pathLength="1" x1="36.4" y1="7.0" x2="-3.5" y2="30.0"/>
+              <line class="grid" pathLength="1" x1="55.4" y1="18.0" x2="15.6" y2="41.0"/>
+              <line class="grid" pathLength="1" x1="74.5" y1="29.0" x2="34.6" y2="52.0"/>
+              <line class="grid" pathLength="1" x1="93.5" y1="40.0" x2="53.7" y2="63.0"/>
+              <line class="grid" pathLength="1" x1="-12.1" y1="-7.0" x2="102.2" y2="59.0"/>
+              <line class="grid" pathLength="1" x1="-26.0" y1="1.0" x2="88.3" y2="67.0"/>
+              <line class="scan" data-dx="110.9" data-dy="64.0" x1="0.0" y1="-14.0" x2="-39.8" y2="9.0"/>
+              <polygon pathLength="1" points="0.0,-20.0 15.6,-11.0 0.0,-2.0 -15.6,-11.0"/>
+              <polygon pathLength="1" points="15.6,9.0 0.0,18.0 0.0,-2.0 15.6,-11.0"/>
+              <polygon pathLength="1" points="-15.6,9.0 0.0,18.0 0.0,-2.0 -15.6,-11.0"/>
+              <polygon pathLength="1" points="22.5,-21.0 38.1,-12.0 22.5,-3.0 6.9,-12.0"/>
+              <polygon pathLength="1" points="38.1,22.0 22.5,31.0 22.5,-3.0 38.1,-12.0"/>
+              <polygon pathLength="1" points="6.9,22.0 22.5,31.0 22.5,-3.0 6.9,-12.0"/>
+              <polygon pathLength="1" points="45.0,-24.0 60.6,-15.0 45.0,-6.0 29.4,-15.0"/>
+              <polygon pathLength="1" points="60.6,35.0 45.0,44.0 45.0,-6.0 60.6,-15.0"/>
+              <polygon pathLength="1" points="29.4,35.0 45.0,44.0 45.0,-6.0 29.4,-15.0"/>
+              <polygon pathLength="1" points="67.5,-29.0 83.1,-20.0 67.5,-11.0 52.0,-20.0"/>
+              <polygon pathLength="1" points="83.1,48.0 67.5,57.0 67.5,-11.0 83.1,-20.0"/>
+              <polygon pathLength="1" points="52.0,48.0 67.5,57.0 67.5,-11.0 52.0,-20.0"/>
+              <polyline class="acc" pathLength="1" points="0.0,-17.0 22.5,-26.0 45.0,-39.0 67.5,-56.0"/>
+              <circle class="trend-tick tt0" cx="0.0" cy="-17.0" r="2.2"/>
+              <circle class="trend-tick tt1" cx="22.5" cy="-26.0" r="2.2"/>
+              <circle class="trend-tick tt2" cx="45.0" cy="-39.0" r="2.2"/>
+              <circle class="trend-tick tt3" cx="67.5" cy="-56.0" r="2.2"/>
+              <line class="acc" pathLength="1" x1="67.5" y1="-56.0" x2="58.9" y2="-57.0"/>
+              <line class="acc" pathLength="1" x1="67.5" y1="-56.0" x2="65.8" y2="-46.0"/>
+              <polygon class="bob acc" points="67.5,-77.0 71.5,-72.0 67.5,-67.0 63.5,-72.0"/>
+            </svg>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="work" id="projects">
+    <video class="bg-video work-video" id="closerVideo" src="assets/video/closer.mp4" muted loop playsinline preload="metadata"></video>
+    <div class="bg-video-shade work-shade"></div>
+
+    <div class="work-inner">
+      <p class="section-label mono">SELECTED PROJECTS</p>
+
+      <a class="card" href="https://github.com/Mohitcr7" target="_blank" rel="noopener" data-card>
+        <div class="card-top mono"><span class="accent">//2026</span><span class="card-arrow">↗</span></div>
+        <h3 class="card-title">J-HUNT</h3>
+        <p class="card-pitch">The agent swarm that hunts jobs while you sleep.</p>
+        <p class="card-body">Six AI agents — Scout, Matcher, Tailor, Applier, Critic, Gatekeeper — scrape 50+ career portals, semantically match roles to my resume via FAISS embeddings, tailor documents, and auto-apply. Orchestrated with LangGraph, reviewed by AutoGen, traced in LangSmith — shipped behind a REST API with Celery + Redis task scheduling, PostgreSQL, and Docker.</p>
+        <p class="card-stack mono">LANGCHAIN · LANGGRAPH · CREWAI · AUTOGEN · FAISS · LANGSMITH · CELERY + REDIS · POSTGRESQL · DOCKER</p>
+      </a>
+
+      <a class="card" href="https://github.com/Mohitcr7/Satellite-based-property-evaluation" target="_blank" rel="noopener" data-card>
+        <div class="card-top mono"><span class="accent">//2026</span><span class="card-arrow">↗</span></div>
+        <h3 class="card-title">ORBITAL WORTH</h3>
+        <p class="card-pitch">Pricing property from space.</p>
+        <p class="card-body">A multimodal ML engine fusing Sentinel-2 satellite imagery with 15K+ geospatial features to value real estate at scale — Optuna-tuned XGBoost with 5-fold CV hitting R² = 0.914, explained by SHAP TreeExplainer across 10,000+ properties.</p>
+        <p class="card-stack mono">SENTINEL-2 · XGBOOST · OPTUNA · 5-FOLD CV · SHAP · GEOPANDAS · PYQGIS · SHAPELY</p>
+      </a>
+
+      <a class="card" href="https://github.com/Mohitcr7/AI_tutor_IIT-JEE" target="_blank" rel="noopener" data-card>
+        <div class="card-top mono"><span class="accent">//2025</span><span class="card-arrow">↗</span></div>
+        <h3 class="card-title">NEURO-MIND</h3>
+        <p class="card-pitch">An AI tutor that thinks like a topper.</p>
+        <p class="card-body">RAG-based IIT-JEE teaching assistant built on 1,850+ JEE Advanced questions and a 1,500+ node concept-formula-misconception graph — embedding-based semantic retrieval and intent detection across Physics, Chemistry, and Math.</p>
+        <p class="card-stack mono">LANGCHAIN · CHROMADB · RAG · KNOWLEDGE GRAPH · SEMANTIC RETRIEVAL · INTENT DETECTION</p>
+      </a>
+
+      <a class="card" href="https://github.com/Mohitcr7/Satellite-based-Flood-Prediction-Model" target="_blank" rel="noopener" data-card>
+        <div class="card-top mono"><span class="accent">//2025</span><span class="card-arrow">↗</span></div>
+        <h3 class="card-title">FLOOD SENTINEL</h3>
+        <p class="card-pitch">Seeing the flood before the water rises.</p>
+        <p class="card-body">An end-to-end ML pipeline fusing Sentinel-1 SAR imagery, DEM data, and 25+ engineered terrain features into a hierarchical XGBoost flood-risk model — 92% recall at 0.88 ROC-AUC, hardened with PCA, SMOTE, and 5-fold cross-validation, SHAP-attributed and served as interactive Folium risk maps.</p>
+        <p class="card-stack mono">SENTINEL-1 SAR · DEM · XGBOOST · PCA · SMOTE · 5-FOLD CV · SHAP · FOLIUM</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ CAREER ============ -->
+  <section class="career" id="career">
+    <p class="section-label mono">CAREER LOG</p>
+
+    <div class="timeline">
+      <div class="timeline-rail" aria-hidden="true"><div class="timeline-rail-fill" id="railFill"></div></div>
+
+      <article class="tl-entry">
+        <span class="tl-node" aria-hidden="true"></span>
+        <p class="tl-date mono">2025 — PRESENT</p>
+        <h3 class="tl-title">AI ENGINEER</h3>
+        <p class="tl-org">Applied AI</p>
+        <p class="tl-desc">Shipping multi-agent systems and RAG pipelines that run in production — and keep running while I sleep.</p>
+        <p class="tl-tags mono">LANGCHAIN · LANGGRAPH · AUTOGEN · FAISS · LANGSMITH</p>
+      </article>
+
+      <article class="tl-entry">
+        <span class="tl-node" aria-hidden="true"></span>
+        <p class="tl-date mono">2025 — 2026</p>
+        <h3 class="tl-title">DATA SCIENTIST</h3>
+        <p class="tl-org">ML &amp; Geospatial Intelligence</p>
+        <p class="tl-desc">Multimodal machine learning over satellite imagery and 15K+ geospatial features — pricing the planet from orbit.</p>
+        <p class="tl-tags mono">XGBOOST · OPTUNA · SHAP · SENTINEL-2</p>
+      </article>
+
+      <article class="tl-entry">
+        <span class="tl-node" aria-hidden="true"></span>
+        <p class="tl-date mono">JAN — JULY 2025</p>
+        <h3 class="tl-title">RESEARCH INTERN</h3>
+        <p class="tl-org">RAG Systems</p>
+        <p class="tl-desc">Built a knowledge-graph-grounded RAG tutor over 1,850+ IIT-JEE Advanced questions.</p>
+        <p class="tl-tags mono">RAG · KNOWLEDGE GRAPHS · INTENT DETECTION</p>
+      </article>
+
+      <article class="tl-entry">
+        <span class="tl-node" aria-hidden="true"></span>
+        <p class="tl-date mono">2021 — 2026</p>
+        <h3 class="tl-title">IIT ROORKEE</h3>
+        <!-- <p class="tl-org">B.Arch (Specialization in AI and Data Science)</p> -->
+        <p class="tl-desc">Architectural & technical foundations — and where the AI obsession began.</p>
+        <p class="tl-tags mono">B.ARCH · AI &amp; DATA SCIENCE</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ FINALE ============ -->
+  <section class="finale" id="finale">
+    <div class="finale-robot" id="finaleRobot" aria-hidden="true">
+      <canvas id="robotCanvas"></canvas>
+      <div class="finale-robot-shade"></div>
+    </div>
+    <div class="finale-spotlight" aria-hidden="true"></div>
+    <span class="finale-robot-tag mono" id="robotTag">MOHIT.BOT // STANDBY</span>
+    <div class="finale-lines">
+      <div class="fl-wrap"><span class="finale-line">LET'S BUILD</span></div>
+      <div class="fl-wrap"><span class="finale-line">WHAT'S <span class="accent">NEXT</span></span></div>
+    </div>
+    <div class="finale-cta">
+      <a class="btn btn-solid" href="mailto:c_manil@ar.iitr.ac.in" data-magnetic>HIRE ME</a>
+      <a class="btn btn-ghost" href="https://github.com/Mohitcr7" target="_blank" rel="noopener" data-magnetic data-social="github">VIEW GITHUB</a>
+    </div>
+    <footer class="footer">
+      <span class="mono footer-copy">© 2026 MOHIT — BUILT WITH LOVE & AGENTS</span>
+      <div class="footer-links mono">
+        <a href="https://github.com/Mohitcr7" target="_blank" rel="noopener" data-social="github">GITHUB</a>
+        <a href="https://www.linkedin.com/in/mohit-chauhan-ab5396365" target="_blank" rel="noopener" data-social="linkedin">LINKEDIN</a>
+        <a href="mailto:c_manil@ar.iitr.ac.in">EMAIL</a>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ============ BACKDROP FX ============ -->
+  <canvas class="bg-grid" id="bgGrid" aria-hidden="true"></canvas>
+  <div class="hud" aria-hidden="true">
+    <span class="hud-hatch"></span>
+    <span class="hud-rail"></span>
+    <span class="hud-side mono">HOST // MOHIT.SYS</span>
+    <span class="hud-corner mono">AUTO</span>
+  </div>
+
+  <!-- ============ GRAIN ============ -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/backdrop.js"></script>
+  <script src="js/robot.js"></script>
+</body>
+</html>
