@@ -13,11 +13,13 @@
   // Bust crop: trim the outer shoulders so the face owns the grid.
   const CROP = { x: 0.14, y: 0.02, w: 0.72, h: 0.9 };
 
-  /* Responsive column counts. */
+  /* Responsive column counts — higher density on wide screens where
+     the portrait is large, so the face stays crisp and recognizable. */
   function pickCols() {
-    if (innerWidth >= 1100) return 120;
-    if (innerWidth >= 720) return 96;
-    return 66;
+    if (innerWidth >= 1500) return 150;
+    if (innerWidth >= 1100) return 132;
+    if (innerWidth >= 720) return 104;
+    return 70;
   }
 
   /* Terminal boot lines shown in the loader while we generate. */

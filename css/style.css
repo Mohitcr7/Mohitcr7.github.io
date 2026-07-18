@@ -638,15 +638,17 @@ body.no-frames .hero-sub { max-width: 520px; }
    entries — bigger and cleanly visible. */
 .career-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(320px, 34vw, 500px);
-  gap: clamp(24px, 4vw, 80px);
+  /* Cap the timeline column; hand the whole rest of the row to the
+     portrait so it fills the blank space on wide screens. */
+  grid-template-columns: minmax(0, 780px) minmax(440px, 1fr);
+  gap: clamp(24px, 4vw, 72px);
   align-items: start;
 }
 .career-portrait { position: relative; align-self: stretch; }
 .career-portrait-sticky {
   position: sticky;
-  top: 11vh;
-  height: 78vh;
+  top: 8vh;
+  height: 88vh;
 }
 .career-portrait-tag {
   position: absolute;

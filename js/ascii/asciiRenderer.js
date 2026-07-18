@@ -30,7 +30,7 @@ window.AsciiRenderer = (() => {
        so the bust is large and cleanly visible. */
     function measure() {
       const b = grid.bbox;
-      cellH = Math.min((H * 0.92) / b.h, (W * 0.86) / (b.w * 0.6));
+      cellH = Math.min((H * 0.99) / b.h, (W * 0.96) / (b.w * 0.6));
       cellW = cellH * 0.6;
       originX = W / 2 - (b.minC + b.w / 2) * cellW;
       originY = H / 2 - (b.minR + b.h / 2) * cellH;
