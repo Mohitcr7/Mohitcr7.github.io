@@ -1,8 +1,9 @@
 /* ================================================================
    MOHIT — Backdrop FX
    01 · cursor-reactive dot-matrix grid (site-wide)
-   02 · ASCII data-sphere in the hero
-   Pure canvas, no dependencies.
+   02 · ASCII data-sphere in the hero (scroll dives INTO it,
+        cursor repels chars, click sends a shockwave + spin kick)
+   The ASCII portrait (bottom-right) lives in js/ascii/.
    ================================================================ */
 (() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -117,7 +118,7 @@
     const R = Math.min(w, h) * (0.32 + dive * 0.9);
     const cam = 1.55 - dive * 1.28;
     const cx = w / 2 + (w / 2 - mouse.x) * -0.04;
-    const cy = h * 0.45 + (h / 2 - mouse.y) * -0.04 + dive * h * 0.05;
+    const cy = h * 0.34 + (h / 2 - mouse.y) * -0.04 + dive * h * 0.05;
 
     // Click shockwave: a decaying ripple in the radius
     let pulseK = 1;

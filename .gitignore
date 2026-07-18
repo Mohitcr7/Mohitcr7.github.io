@@ -1,0 +1,11 @@
+# Secrets & local tooling — never publish
+.mcp.json
+.claude/
+PROMPTS.md
+
+# OS cruft
+.DS_Store
+**/.DS_Store
+
+# Raw source photo (the site uses assets/portrait-face.png)
+assets/IMG_4599 Large.png

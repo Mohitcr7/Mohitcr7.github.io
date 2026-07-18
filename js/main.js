@@ -41,10 +41,67 @@ function finishLoader() {
   setLoader(1);
   setTimeout(() => loaderEl.classList.add('done'), 350);
   introReveal();
+  typeCerts();
+}
+
+/* ================================================================
+   HERO — certifications typewriter (coding-style load)
+   Types each line char-by-char: "> ORG :: credential", org in bold,
+   with a blinking caret that rides the active line.
+   ================================================================ */
+function typeCerts() {
+  const lines = gsap.utils.toArray('.cert-line');
+  if (!lines.length) return;
+  gsap.to('.hero-certs', { opacity: 1, duration: 0.5, ease: 'power2.out' });
+
+  const segsFor = (el) => [
+    { text: '> ', cls: 'cert-sep' },
+    { text: el.dataset.org, cls: 'org' },
+    { text: ' :: ', cls: 'cert-sep' },
+    { text: el.dataset.text, cls: '' },
+  ];
+
+  if (prefersReduced) {
+    lines.forEach((el) => {
+      el.innerHTML = segsFor(el).map((s) =>
+        s.cls === 'org' ? `<b>${s.text}</b>`
+          : s.cls ? `<span class="${s.cls}">${s.text}</span>` : s.text
+      ).join('');
+    });
+    return;
+  }
+
+  const caret = document.createElement('span');
+  caret.className = 'cert-caret';
+  let li = 0;
+
+  function typeLine() {
+    if (li >= lines.length) return; // caret stays blinking on the last line
+    const el = lines[li];
+    el.appendChild(caret);
+    const segs = segsFor(el);
+    let si = 0, ci = 0, node = null;
+    const iv = setInterval(() => {
+      const seg = segs[si];
+      if (!node) {
+        node = seg.cls === 'org' ? document.createElement('b') : document.createElement('span');
+        if (seg.cls && seg.cls !== 'org') node.className = seg.cls;
+        el.insertBefore(node, caret);
+      }
+      node.textContent += seg.text[ci++];
+      if (ci >= seg.text.length) { si++; ci = 0; node = null; }
+      if (si >= segs.length) {
+        clearInterval(iv);
+        li++;
+        setTimeout(typeLine, 200);
+      }
+    }, 16);
+  }
+  setTimeout(typeLine, 600);
 }
 
 document.body.classList.add('no-frames');
-gsap.set('.hero-content', { y: '-9vh' });
+gsap.set('.hero-content', { y: '-22vh' }); // lift the type clear of the heritage half
 (function bootLoader() {
   let p = 0;
   const iv = setInterval(() => {
@@ -86,8 +143,9 @@ ScrollTrigger.create({
       opacity: 1 - Math.max(0, (p - 0.55)) * 2.4,
     });
     gsap.set('.hero-scrollcue', { opacity: 1 - p * 4 });
-    // HUD fades as the hero scrolls away (sphere handles its own dive + fade)
+    // HUD + certs fade as the hero scrolls away (sphere dives on its own)
     gsap.set('.hud', { opacity: Math.max(0, 1 - p * 1.6) });
+    gsap.set('.hero-certs', { opacity: Math.max(0, 1 - p * 2.2) });
   },
 });
 

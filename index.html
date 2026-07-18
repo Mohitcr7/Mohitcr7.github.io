@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=12" />
 </head>
 <body>
 
@@ -40,6 +40,7 @@
   <section class="hero" id="hero">
     <div class="hero-sticky">
       <canvas class="hero-canvas" id="heroCanvas"></canvas>
+      <div class="hero-heritage" aria-hidden="true"></div>
       <canvas class="ascii-sphere" id="asciiSphere" aria-hidden="true"></canvas>
       <div class="hero-vignette"></div>
 
@@ -54,6 +55,13 @@
       <div class="hero-scrollcue mono">
         <span>SCROLL TO ENTER</span>
         <div class="scrollcue-line"></div>
+      </div>
+
+      <div class="hero-certs" aria-label="Certifications">
+        <p class="cert-head mono">// CERTIFICATIONS</p>
+        <p class="cert-line mono" data-org="AWS" data-text="Building GenAI Systems Using Amazon Bedrock"></p>
+        <p class="cert-line mono" data-org="MICROSOFT" data-text="Certified Generative AI Specialist"></p>
+        <p class="cert-line mono" data-org="IBM" data-text="Advanced RAG and Agentic AI"></p>
       </div>
     </div>
   </section>
@@ -80,7 +88,7 @@
             <circle class="g-acc" cx="110" cy="110" r="84" pathLength="100" stroke-dasharray="12 88" stroke-dashoffset="-19" stroke-width="3"/>
           </svg>
           <div class="viz-center">
-            <span class="viz-num"><span class="count" data-target="6" data-suffix="">0</span></span>
+            <span class="viz-num"><span class="count" data-target="7" data-suffix="">0</span></span>
             <span class="viz-cap mono">SYSTEMS LIVE</span>
           </div>
         </div>
@@ -364,6 +372,7 @@
   <section class="career" id="career">
     <p class="section-label mono">CAREER LOG</p>
 
+    <div class="career-grid">
     <div class="timeline">
       <div class="timeline-rail" aria-hidden="true"><div class="timeline-rail-fill" id="railFill"></div></div>
 
@@ -402,6 +411,14 @@
         <p class="tl-desc">Architectural & technical foundations — and where the AI obsession began.</p>
         <p class="tl-tags mono">B.ARCH · AI &amp; DATA SCIENCE</p>
       </article>
+    </div>
+
+      <aside class="career-portrait" aria-hidden="true">
+        <div class="career-portrait-sticky">
+          <canvas class="ascii-portrait" id="asciiPortrait"></canvas>
+          <span class="career-portrait-tag mono">MOHIT.EXE // IDENTITY</span>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -446,8 +463,12 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/backdrop.js"></script>
-  <script src="js/robot.js"></script>
+  <script src="js/main.js?v=12"></script>
+  <script src="js/backdrop.js?v=12"></script>
+  <script src="js/ascii/asciiGenerator.js?v=12"></script>
+  <script src="js/ascii/asciiRenderer.js?v=12"></script>
+  <script src="js/ascii/animationController.js?v=12"></script>
+  <script src="js/ascii/asciiPortrait.js?v=12"></script>
+  <script src="js/robot.js?v=12"></script>
 </body>
 </html>
