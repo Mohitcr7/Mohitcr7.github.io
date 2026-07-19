@@ -143,9 +143,10 @@ ScrollTrigger.create({
       opacity: 1 - Math.max(0, (p - 0.55)) * 2.4,
     });
     gsap.set('.hero-scrollcue', { opacity: 1 - p * 4 });
-    // HUD + certs fade as the hero scrolls away (sphere dives on its own)
+    // HUD + certs + headshot chip fade as the hero scrolls away
     gsap.set('.hud', { opacity: Math.max(0, 1 - p * 1.6) });
     gsap.set('.hero-certs', { opacity: Math.max(0, 1 - p * 2.2) });
+    gsap.set('.nav-photo', { opacity: Math.max(0, 1 - p * 1.6) });
   },
 });
 
