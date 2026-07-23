@@ -177,21 +177,125 @@
     stx.globalAlpha = 1;
   }
 
+  /* ---------------- DATA RAIN + FLOATING DUST ----------------
+     Sparse, futuristic AI-telemetry streams + parallax dust motes,
+     both on the #dataRain canvas behind the sphere. Deliberately faint
+     — only noticeable after staring for a few seconds. Throttled on
+     mobile; fades out with the hero as you dive. */
+  const rain = document.getElementById('dataRain');
+  const rtx = rain ? rain.getContext('2d') : null;
+  const isMobile = innerWidth < 720;
+  const RAIN_CHARS = '01<>{}[]#/\\+=01·01';
+
+  let streams = [];
+  let motes = [];
+
+  function makeStream(w, h, spread) {
+    const len = 5 + (Math.random() * 15 | 0);
+    const chars = [];
+    for (let i = 0; i < len; i++) chars.push(RAIN_CHARS[(Math.random() * RAIN_CHARS.length) | 0]);
+    return {
+      x: Math.random() * w,
+      y: spread ? Math.random() * h : -Math.random() * h * 0.4,
+      len, chars,
+      fs: 12 + Math.random() * 8,
+      speed: 0.014 + Math.random() * 0.05,   // fraction of height per ms·0.06
+      alpha: 0.1 + Math.random() * 0.34,     // random opacity
+    };
+  }
+
+  function seedFX() {
+    if (!rain) return;
+    const w = rain.clientWidth || innerWidth;
+    const h = rain.clientHeight || innerHeight;
+    const cols = Math.max(6, Math.round((w / 52) * (isMobile ? 0.5 : 1)));
+    streams = [];
+    for (let i = 0; i < cols; i++) streams.push(makeStream(w, h, true));
+    const nMotes = isMobile ? 24 : 68;
+    motes = [];
+    for (let i = 0; i < nMotes; i++) {
+      motes.push({
+        x: Math.random() * w, y: Math.random() * h,
+        z: 0.3 + Math.random() * 0.7,          // depth → parallax + size
+        r: 0.6 + Math.random() * 1.3,
+        ph: Math.random() * Math.PI * 2,
+        sp: 0.2 + Math.random() * 0.5,
+      });
+    }
+  }
+
+  function drawRain(dt, t, fade) {
+    if (!rtx) return;
+    const w = rain.clientWidth, h = rain.clientHeight;
+    rtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    rtx.clearRect(0, 0, w, h);
+    if (fade <= 0) return;
+    rtx.globalAlpha = fade;
+    rtx.textAlign = 'center';
+    rtx.textBaseline = 'middle';
+
+    for (const s of streams) {
+      s.y += s.speed * dt * h * 0.06;
+      if (Math.random() < 0.35) s.chars[(Math.random() * s.len) | 0] = RAIN_CHARS[(Math.random() * RAIN_CHARS.length) | 0];
+      rtx.font = `${s.fs.toFixed(1)}px "JetBrains Mono", monospace`;
+      const step = s.fs * 1.16;
+      for (let k = 0; k < s.len; k++) {
+        const cy = s.y - k * step;
+        if (cy < -20 || cy > h + 20) continue;
+        const a = s.alpha * (1 - k / s.len);
+        if (k === 0) rtx.fillStyle = `rgba(190, 255, 224, ${(a * 1.2).toFixed(3)})`;
+        else rtx.fillStyle = `rgba(0, 220, 130, ${a.toFixed(3)})`;
+        rtx.fillText(s.chars[k], s.x, cy);
+      }
+      if (s.y - s.len * step > h) Object.assign(s, makeStream(w, h, false));
+    }
+
+    const px = mouse.x / innerWidth - 0.5;
+    const py = mouse.y / innerHeight - 0.5;
+    for (const m of motes) {
+      m.ph += m.sp * dt * 0.0016;
+      const sx = m.x + Math.sin(m.ph) * 8 * m.z - px * 30 * m.z;
+      const sy = m.y + Math.cos(m.ph * 0.8) * 6 * m.z - py * 22 * m.z;
+      const a = (0.1 + 0.2 * m.z) * (0.55 + 0.45 * Math.sin(m.ph));
+      rtx.fillStyle = `rgba(242, 234, 217, ${Math.max(0, a).toFixed(3)})`;
+      rtx.beginPath();
+      rtx.arc(sx, sy, m.r * m.z, 0, 6.283);
+      rtx.fill();
+    }
+    rtx.globalAlpha = 1;
+  }
+
+  function sizeRain() {
+    if (!rain) return;
+    rain.width = Math.round(rain.clientWidth * DPR);
+    rain.height = Math.round(rain.clientHeight * DPR);
+  }
+
   /* ---------------- LOOP ---------------- */
   function sizeAll() {
     sizeGrid();
     sizeSphere();
+    sizeRain();
     heroH = hero ? hero.offsetHeight : 0;
   }
   addEventListener('resize', () => {
     sizeAll();
-    if (reduced) { drawGrid(0); drawSphere(16, 0); }
+    seedFX();
+    if (reduced) { drawGrid(0); drawSphere(16, 0); drawRain(16, 0, 0.5); }
   });
   sizeAll();
+  seedFX();
+
+  function heroFade() {
+    const scrollable = Math.max(1, heroH - innerHeight);
+    const p = Math.min(1, Math.max(0, scrollY / scrollable));
+    return p < 0.55 ? 1 : Math.max(0, 1 - (p - 0.55) / 0.28);
+  }
 
   if (reduced) {
     drawGrid(0);
     drawSphere(16, 0);
+    drawRain(16, 0, 0.5);
     return;
   }
 
@@ -204,8 +308,10 @@
     drawGrid(t);
     if (scrollY < heroH) {
       drawSphere(dt, t);
+      drawRain(dt, t, heroFade());
     } else {
       stx.clearRect(0, 0, sph.clientWidth, sph.clientHeight);
+      if (rtx) rtx.clearRect(0, 0, rain.clientWidth, rain.clientHeight);
     }
     requestAnimationFrame(loop);
   })(last);

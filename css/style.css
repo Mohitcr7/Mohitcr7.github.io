@@ -59,7 +59,15 @@ a { color: inherit; text-decoration: none; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px clamp(20px, 4vw, 56px);
-  mix-blend-mode: normal;
+  transition: padding 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+}
+/* Floating glass bar once the hero starts to scroll away */
+.nav.scrolled {
+  padding-top: 14px; padding-bottom: 14px;
+  background: rgba(6, 7, 7, 0.55);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  box-shadow: 0 1px 0 rgba(242, 234, 217, 0.06), 0 18px 40px rgba(0, 0, 0, 0.4);
 }
 .nav-logo {
   font-family: var(--display);
@@ -70,8 +78,28 @@ a { color: inherit; text-decoration: none; }
   font-size: 11px; letter-spacing: 0.16em; color: var(--cream-dim);
   transition: color 0.3s;
   position: relative;
+  padding-bottom: 4px;
+}
+/* Underline grows from the centre on hover / active */
+.nav-links a::after {
+  content: ""; position: absolute; left: 50%; bottom: 0;
+  width: 0; height: 1px; background: var(--emerald);
+  box-shadow: 0 0 8px var(--emerald);
+  transform: translateX(-50%);
+  transition: width 0.35s ease;
 }
 .nav-links a:hover { color: var(--emerald); }
+.nav-links a:hover::after { width: 100%; }
+/* Current section — glowing emerald dot + brighter label */
+.nav-links a.active { color: var(--cream); }
+.nav-links a.active::before {
+  content: ""; position: absolute; left: -11px; top: 50%;
+  width: 5px; height: 5px; border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--emerald);
+  box-shadow: 0 0 9px var(--emerald);
+  animation: pulse 2.2s infinite;
+}
 .nav-status {
   display: flex; align-items: center; gap: 8px;
   font-size: 10px; letter-spacing: 0.16em; color: var(--cream-dim);
@@ -128,12 +156,48 @@ a { color: inherit; text-decoration: none; }
 .hero { height: 420vh; position: relative; }
 .hero-sticky {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
+}
+/* Camera plane — mouse + slow drift translate this whole layer for a
+   cinematic parallax that reads as camera movement, not object motion */
+.hero-camera {
+  position: absolute; inset: 0; z-index: 3;
   display: flex; align-items: center; justify-content: center;
+  will-change: transform;
 }
 .hero-canvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
   display: block;
   background: radial-gradient(ellipse 60% 50% at 50% 55%, #10201a 0%, var(--ink) 70%);
+}
+/* Matrix data-rain — sparse futuristic telemetry streams behind the hero */
+.data-rain {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0.42;
+  filter: blur(0.4px);
+}
+/* Hero halo — enormous volumetric ring of light behind MOHIT.
+   Not a solid disc: a soft radial ring + dust bloom, ~15% opacity,
+   breathing very slowly. Screen-blended so it only ever adds light. */
+.hero-halo {
+  position: absolute; z-index: 1;
+  left: 50%; top: 52%;
+  width: min(1120px, 112vw); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 32%, rgba(0, 220, 130, 0.1) 45%, transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(0, 220, 130, 0.045) 0%, transparent 48%),
+    radial-gradient(circle at 50% 50%, rgba(242, 234, 217, 0.04) 0%, transparent 40%);
+  filter: blur(6px);
+  animation: haloBreathe 15s ease-in-out infinite;
+}
+@keyframes haloBreathe {
+  0%, 100% { opacity: 0.6;  transform: translate(-50%, -50%) scale(0.98); }
+  50%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.04); }
 }
 body.no-frames .hero-sub { max-width: 520px; }
 
@@ -161,12 +225,12 @@ body.no-frames .hero-sub { max-width: 520px; }
       rgba(6, 6, 7, 0) 40%,
       rgba(6, 6, 7, 0.45) 68%,
       rgba(6, 6, 7, 0.8) 100%),
-    url("../assets/IITR.jpeg");
+    url("../assets/IITR.png");
   background-repeat: no-repeat;
   background-position: center bottom, center bottom;
   background-size: 100% 100%, cover;
-  filter: grayscale(1) brightness(0.52) contrast(1.2);
-  opacity: 0.94;
+  filter: grayscale(0.9) brightness(0.72) contrast(1.12);
+  opacity: 0.96;
   mask-image:
     linear-gradient(to top,
       rgba(0, 0, 0, 1) 0%,
@@ -219,7 +283,7 @@ body.no-frames .hero-sub { max-width: 520px; }
 }
 @keyframes heritageReveal {
   from { opacity: 0; transform: translateY(2.5vh); }
-  to { opacity: 0.94; transform: translateY(0); }
+  to { opacity: 0.96; transform: translateY(0); }
 }
 /* Scroll-linked depth falloff (progressive enhancement): the
    building sinks and dims as the dive begins. Composed AFTER the
@@ -254,7 +318,7 @@ body.no-frames .hero-sub { max-width: 520px; }
 }
 
 .hero-vignette {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; z-index: 2;
   background:
     radial-gradient(ellipse 90% 75% at 50% 50%, transparent 45%, rgba(6,6,7,0.85) 100%),
     linear-gradient(to top, rgba(6,6,7,0.9) 0%, transparent 22%);
@@ -266,46 +330,106 @@ body.no-frames .hero-sub { max-width: 520px; }
   padding: 0 4vw;
 }
 .hero-kicker {
-  font-size: clamp(9px, 1.1vw, 12px);
-  letter-spacing: 0.32em;
+  font-size: clamp(8px, 0.82vw, 10px);
+  letter-spacing: 0.4em;
   color: var(--emerald);
-  margin-bottom: 2.5vh;
+  margin-bottom: 2.6vh;
+  animation: kickerBreathe 6s ease-in-out infinite;
+}
+/* Breathe the glow, never the opacity — GSAP owns the intro fade */
+@keyframes kickerBreathe {
+  0%, 100% { text-shadow: 0 0 6px rgba(0, 220, 130, 0.12); }
+  50%      { text-shadow: 0 0 15px rgba(0, 220, 130, 0.5); }
 }
 .hero-title {
   font-family: var(--display);
-  font-size: clamp(62px, 13vw, 210px);
+  font-size: clamp(52px, 10vw, 168px);
   line-height: 0.9;
   letter-spacing: 0.01em;
-  color: var(--cream);
   display: inline-block;
   white-space: nowrap;
 }
+/* MOHIT — carved stone. A cream gradient is clipped to each glyph; a
+   specular sheen sweeps across (staggered per letter so it reads as one
+   pass over the word); an emerald rim + bloom sit behind. Global .grain
+   adds the micro surface noise. */
 .ht-letter {
   display: inline-block;
   will-change: transform, opacity;
+  background-image:
+    linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.62) 49%, rgba(255, 255, 255, 0.06) 57%, transparent 66%),
+    linear-gradient(176deg, #f9f4e9 4%, #ece5d5 44%, #dcd3c0 78%, #cec4ad 100%);
+  background-size: 320% 100%, 100% 100%;
+  background-position: -80% 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  text-shadow:
+    0 0 1px rgba(0, 220, 130, 0.32),
+    0 0 20px rgba(0, 220, 130, 0.09),
+    0 6px 32px rgba(0, 0, 0, 0.55);
+  animation: sheenSweep 9s ease-in-out infinite;
+}
+.ht-letter:nth-of-type(1) { animation-delay: 0s; }
+.ht-letter:nth-of-type(2) { animation-delay: 0.11s; }
+.ht-letter:nth-of-type(3) { animation-delay: 0.22s; }
+.ht-letter:nth-of-type(4) { animation-delay: 0.33s; }
+.ht-letter:nth-of-type(5) { animation-delay: 0.44s; }
+@keyframes sheenSweep {
+  0%   { background-position: -80% 0, 0 0; }
+  16%  { background-position: 170% 0, 0 0; }
+  100% { background-position: 170% 0, 0 0; }
 }
 .ht-reg {
   display: inline-block;
   font-size: 0.18em;
   vertical-align: super;
   margin-left: 0.15em;
+  color: var(--emerald);
+  text-shadow: 0 0 14px var(--emerald-dim);
 }
 .hero-sub {
   margin-top: 3vh;
-  font-size: clamp(15px, 1.7vw, 22px);
+  font-size: clamp(14px, 1.4vw, 19px);
   font-weight: 300;
-  color: var(--cream-dim);
-  max-width: 640px;
+  line-height: 1.7;
+  letter-spacing: 0.012em;
+  color: rgba(242, 234, 217, 0.82);
+  max-width: 560px;
   margin-left: auto; margin-right: auto;
 }
-.hero-sub em { color: var(--cream); font-style: italic; }
+.hero-sub em {
+  color: var(--emerald);
+  font-style: italic;
+  font-weight: 400;
+  text-shadow: 0 0 18px rgba(0, 220, 130, 0.4);
+}
+/* Explore CTA — glass pill, animated chevrons */
+.hero-explore {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-top: 4vh;
+  padding: 15px 30px;
+  font-size: 11px; letter-spacing: 0.28em; color: var(--cream);
+  border: 1px solid var(--emerald-dim);
+  border-radius: 40px;
+  background: rgba(0, 220, 130, 0.04);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
+}
+.hero-explore:hover {
+  border-color: var(--emerald);
+  background: rgba(0, 220, 130, 0.1);
+  box-shadow: 0 0 34px rgba(0, 220, 130, 0.22);
+}
+.he-chev { color: var(--emerald); letter-spacing: -0.1em; animation: chevSlide 1.9s ease-in-out infinite; }
+@keyframes chevSlide { 0%,100% { transform: translateX(0); opacity: 0.6; } 50% { transform: translateX(4px); opacity: 1; } }
 /* Certifications terminal — bottom-left counterweight to the
    ASCII portrait pinned in the bottom-right corner */
 .hero-certs {
   position: absolute;
   left: clamp(20px, 4vw, 56px);
-  bottom: 112px;
-  z-index: 3;
+  bottom: 134px;
+  z-index: 4;
   opacity: 0; /* revealed when the typewriter starts */
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -338,20 +462,153 @@ body.no-frames .hero-sub { max-width: 520px; }
 }
 
 .hero-scrollcue {
-  position: absolute; bottom: 4vh; left: 50%; transform: translateX(-50%);
-  z-index: 3;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  font-size: 9px; letter-spacing: 0.28em; color: var(--cream-dim);
+  position: absolute; bottom: 3.4vh; left: 50%; transform: translateX(-50%);
+  z-index: 4;
+  display: flex; flex-direction: column; align-items: center; gap: 11px;
+  font-size: 9px; letter-spacing: 0.3em; color: var(--cream-dim);
 }
-.scrollcue-line {
-  width: 1px; height: 44px;
-  background: linear-gradient(to bottom, var(--emerald), transparent);
-  animation: cueDrop 1.8s ease-in-out infinite;
-  transform-origin: top;
+/* Minimal mouse outline with a glowing dot that drifts down + pulses */
+.mouse {
+  width: 22px; height: 36px;
+  border: 1.5px solid rgba(242, 234, 217, 0.45);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 0 18px rgba(0, 220, 130, 0.12);
 }
-@keyframes cueDrop {
-  0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; }
+.mouse-dot {
+  position: absolute; left: 50%; top: 7px;
+  width: 3px; height: 6px; border-radius: 3px;
+  background: var(--emerald);
+  box-shadow: 0 0 8px var(--emerald);
+  transform: translateX(-50%);
+  animation: mouseDot 1.9s ease-in-out infinite;
 }
+@keyframes mouseDot {
+  0% { opacity: 0; transform: translate(-50%, -3px); }
+  35% { opacity: 1; }
+  70% { opacity: 1; transform: translate(-50%, 12px); }
+  100% { opacity: 0; transform: translate(-50%, 15px); }
+}
+
+/* ============ HERO GLASS FURNITURE ============
+   Shared premium glassmorphism: translucent dark glass, hairline
+   border, soft inner highlight, corner glow. Fade with the hero on
+   scroll (see main.js .hero-fade group). */
+.glass-card {
+  position: relative;
+  background: rgba(10, 14, 12, 0.42);
+  border: 1px solid rgba(242, 234, 217, 0.1);
+  border-radius: 14px;
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.015),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
+}
+/* Corner glow — a faint emerald bloom that strengthens on hover */
+.glass-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 100% 0, rgba(0, 220, 130, 0.14), transparent 55%);
+  opacity: 0.5; transition: opacity 0.5s ease;
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--emerald-dim);
+  background: rgba(12, 18, 15, 0.55);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 30px 70px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(0, 220, 130, 0.14);
+}
+.glass-card:hover::after { opacity: 1; }
+
+/* Left · current focus */
+.hero-focus {
+  position: absolute; z-index: 3;
+  left: clamp(20px, 4vw, 64px); top: 50%;
+  transform: translateY(-50%);
+  width: clamp(230px, 22vw, 300px);
+  padding: 26px 26px 24px;
+  text-align: left;
+}
+.hero-focus:hover { transform: translateY(calc(-50% - 4px)); }
+.hf-label { font-size: 9px; letter-spacing: 0.26em; color: var(--emerald); margin-bottom: 16px; }
+.hf-text { font-size: clamp(17px, 1.5vw, 22px); line-height: 1.4; color: rgba(242, 234, 217, 0.75); font-weight: 300; }
+.hf-text em { color: var(--cream); font-style: normal; font-weight: 400; }
+.hf-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 22px; font-size: 10px; letter-spacing: 0.22em; color: var(--emerald);
+  transition: gap 0.35s ease;
+}
+.hf-link span { transition: transform 0.35s ease; }
+.hf-link:hover { gap: 11px; }
+.hf-link:hover span { transform: translate(3px, -3px); }
+
+/* Right · capability chips */
+.hero-features {
+  position: absolute; z-index: 3;
+  right: clamp(20px, 4vw, 64px); top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 12px;
+  width: clamp(232px, 22vw, 296px);
+}
+.feat {
+  display: flex; align-items: center; gap: 15px;
+  padding: 16px 18px;
+  text-align: left;
+}
+.feat-ic {
+  width: 38px; height: 38px; flex: none;
+  display: grid; place-items: center;
+  border: 1px solid rgba(242, 234, 217, 0.12);
+  border-radius: 9px;
+  color: var(--emerald);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.feat-ic svg { width: 20px; height: 20px; }
+.feat:hover .feat-ic { border-color: var(--emerald-dim); box-shadow: 0 0 18px rgba(0, 220, 130, 0.2); }
+.feat-txt { display: flex; flex-direction: column; gap: 3px; }
+.feat-title { font-size: 12px; letter-spacing: 0.18em; color: var(--cream); }
+.feat-sub { font-size: 12px; letter-spacing: 0.01em; color: var(--cream-dim); font-family: var(--body); }
+
+/* Vertical side signature on the right edge */
+.hero-side {
+  position: absolute; z-index: 4;
+  right: 16px; top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  font-size: 9px; letter-spacing: 0.34em; color: rgba(242, 234, 217, 0.34);
+  white-space: nowrap;
+}
+
+/* Boot log — bottom-right terminal readout */
+.hero-bootlog {
+  position: absolute; z-index: 4;
+  right: clamp(20px, 4vw, 56px); bottom: 30px;
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+  font-size: 10px; letter-spacing: 0.14em; color: rgba(242, 234, 217, 0.5);
+}
+.hero-bootlog .accent { color: var(--emerald); }
+
+/* Social icons — bottom-left, stacked above the HUD bracket */
+.hero-social {
+  position: absolute; z-index: 5;
+  left: clamp(20px, 4vw, 56px); bottom: 96px;
+  display: flex; gap: 18px; align-items: center;
+}
+.hero-social a {
+  width: 20px; height: 20px;
+  color: rgba(242, 234, 217, 0.5);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.hero-social a:hover { color: var(--emerald); transform: translateY(-2px); }
+.hero-social svg { width: 100%; height: 100%; display: block; }
 
 /* ============ STATS ============ */
 .stats {
@@ -857,7 +1114,7 @@ body.no-frames .hero-sub { max-width: 520px; }
 .ascii-sphere {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 /* ASCII portrait now lives in the CAREER section (see .career-grid).
@@ -949,6 +1206,19 @@ body.no-frames .hero-sub { max-width: 520px; }
   .tl-entry { padding: 20px 14px; margin-left: -14px; }
   .tl-node { left: calc(15px - clamp(34px, 5vw, 64px)); top: 26px; }
   .finale-line { font-size: clamp(34px, 10.5vw, 58px); }
+  /* Bigger identity banner on phones so the face reads clearly */
+  .career-portrait-sticky { height: 54vh; }
+}
+
+/* Hero glass furniture folds away on narrower screens so it never
+   crowds the title — mobile stays exactly as it was, plus a compact CTA */
+@media (max-width: 1180px) {
+  .hero-focus, .hero-features { display: none; }
+}
+@media (max-width: 720px) {
+  .hero-side, .hero-bootlog, .hero-social { display: none; }
+  .hero-explore { margin-top: 3vh; padding: 12px 22px; letter-spacing: 0.2em; }
+  .hero-halo { top: 44%; width: 150vw; }
 }
 
 /* ============ DESKTOP SCALE-UP (>=1024px only) ============
@@ -964,7 +1234,7 @@ body.no-frames .hero-sub { max-width: 520px; }
   .nav-status { font-size: 12px; }
 
   /* HERO */
-  .hero-sub { font-size: clamp(20px, 1.7vw, 26px); }
+  .hero-sub { font-size: clamp(16px, 1.3vw, 20px); }
 
   /* PILLARS */
   .pillar-desc { font-size: clamp(21px, 1.9vw, 29px); max-width: 600px; }
@@ -1003,11 +1273,14 @@ body.no-frames .hero-sub { max-width: 520px; }
 
 /* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .status-dot, .scrollcue-line, .grain,
+  .marquee-track, .status-dot, .grain,
   .pillar-icon svg, .pillar-icon .dash, .pillar-icon .node,
   .pillar-icon .orbit, .pillar-icon .ping, .pillar-icon .blink,
   .pillar-icon .trend-tick, .pillar-icon .bob,
   .finale-spotlight,
+  .hero-halo, .hero-kicker, .ht-letter, .he-chev, .mouse-dot,
   .hero-heritage, .hero-heritage::before, .hero-heritage::after,
   .hero-vignette::before { animation: none; }
+  /* Keep the stone fill legible without the sweep */
+  .ht-letter { background-position: 40% 0, 0 0; }
 }

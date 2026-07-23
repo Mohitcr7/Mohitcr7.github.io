@@ -10,16 +10,20 @@
 
   const SRC = 'assets/portrait-face.png';
   const RAMP = 'hacker'; // see AsciiGenerator.RAMPS
-  // Bust crop: trim the outer shoulders so the face owns the grid.
-  const CROP = { x: 0.14, y: 0.02, w: 0.72, h: 0.9 };
 
-  /* Responsive column counts — higher density on wide screens where
-     the portrait is large, so the face stays crisp and recognizable. */
-  function pickCols() {
-    if (innerWidth >= 1500) return 150;
-    if (innerWidth >= 1100) return 132;
-    if (innerWidth >= 720) return 104;
-    return 70;
+  /* Responsive density + crop. On wide screens the portrait is large,
+     so a head-and-shoulders bust reads fine. On phones the canvas is
+     small, so we crop TIGHT to the head (face owns the whole grid) and
+     push the density up — otherwise the face gets too few cells to be
+     recognizable. */
+  const CROP_WIDE = { x: 0.14, y: 0.02, w: 0.72, h: 0.9 };
+  const CROP_FACE = { x: 0.23, y: 0.19, w: 0.54, h: 0.6 };
+  function pickConfig() {
+    const w = innerWidth;
+    if (w >= 1500) return { cols: 150, crop: CROP_WIDE };
+    if (w >= 1100) return { cols: 132, crop: CROP_WIDE };
+    if (w >= 720)  return { cols: 104, crop: CROP_WIDE };
+    return { cols: 122, crop: CROP_FACE };
   }
 
   /* Terminal boot lines shown in the loader while we generate. */
@@ -43,12 +47,12 @@
 
   async function init() {
     playBootSequence();
-    let cols = pickCols();
+    let cfg = pickConfig();
     const renderer = window.AsciiRenderer.create(canvas);
 
     let grid;
     try {
-      grid = await window.AsciiGenerator.generate(SRC, cols, { ramp: RAMP, crop: CROP });
+      grid = await window.AsciiGenerator.generate(SRC, cfg.cols, { ramp: RAMP, crop: cfg.crop });
     } catch (_) {
       return; // portrait asset missing — leave the hero clean
     }
@@ -61,16 +65,19 @@
     const anim = window.AsciiAnimation.create(renderer, grid, { trigger });
     anim.start();
 
-    // Regenerate at a different density when the breakpoint changes.
+    // Regenerate at a new density/crop when the breakpoint changes.
     let resizeTimer = 0;
+    let sig = cfg.cols + ':' + JSON.stringify(cfg.crop);
     addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(async () => {
-        const next = pickCols();
-        if (next !== cols) {
-          cols = next;
+        const next = pickConfig();
+        const nextSig = next.cols + ':' + JSON.stringify(next.crop);
+        if (nextSig !== sig) {
+          sig = nextSig;
+          cfg = next;
           try {
-            const g = await window.AsciiGenerator.generate(SRC, cols, { ramp: RAMP, crop: CROP });
+            const g = await window.AsciiGenerator.generate(SRC, cfg.cols, { ramp: RAMP, crop: cfg.crop });
             // Mutate the shared grid object so the renderer AND the
             // animation controller both see the new density.
             Object.assign(grid, g);

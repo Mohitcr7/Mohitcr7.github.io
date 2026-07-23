@@ -42,6 +42,7 @@ function finishLoader() {
   setTimeout(() => loaderEl.classList.add('done'), 350);
   introReveal();
   typeCerts();
+  bootLog();
 }
 
 /* ================================================================
@@ -101,7 +102,7 @@ function typeCerts() {
 }
 
 document.body.classList.add('no-frames');
-gsap.set('.hero-content', { y: '-22vh' }); // lift the type clear of the heritage half
+gsap.set('.hero-content', { y: '-14vh' }); // lift the type clear of the heritage half
 (function bootLoader() {
   let p = 0;
   const iv = setInterval(() => {
@@ -115,19 +116,31 @@ gsap.set('.hero-content', { y: '-22vh' }); // lift the type clear of the heritag
 const letters = gsap.utils.toArray('.ht-letter');
 const reg = document.querySelector('.ht-reg');
 
+/* Hero glass furniture — hidden until the boot sequence reveals it */
+const FURNITURE = '.hero-focus, .hero-features, .hero-explore, .hero-side, .hero-social';
+let heroRevealed = false;
+
 gsap.set(letters, { yPercent: 120, opacity: 0 });
 gsap.set(reg, { scale: 0, opacity: 0 });
 gsap.set('.hero-kicker', { opacity: 0, y: 16 });
 gsap.set('.hero-sub', { opacity: 0, y: 24 });
+gsap.set('.hero-explore', { opacity: 0, y: 20 });
+gsap.set('.hero-focus', { opacity: 0, x: -28 });
+gsap.set('.hero-features', { opacity: 0, x: 28 });
+gsap.set('.hero-side, .hero-social', { opacity: 0 });
 
 function introReveal() {
-  const tl = gsap.timeline({ delay: 0.25 });
+  const tl = gsap.timeline({ delay: 0.25, onComplete: () => { heroRevealed = true; } });
   tl.to(letters, {
     yPercent: 0, opacity: 1, duration: 1.1, stagger: 0.09, ease: 'power4.out',
   })
     .to(reg, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(2.5)' }, '-=0.5')
     .to('.hero-kicker', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.7')
-    .to('.hero-sub', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.45');
+    .to('.hero-sub', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.45')
+    .to('.hero-explore', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2')
+    .to('.hero-focus', { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+    .to('.hero-features', { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }, '-=0.8')
+    .to('.hero-side, .hero-social', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.6');
 }
 
 ScrollTrigger.create({
@@ -147,8 +160,75 @@ ScrollTrigger.create({
     gsap.set('.hud', { opacity: Math.max(0, 1 - p * 1.6) });
     gsap.set('.hero-certs', { opacity: Math.max(0, 1 - p * 2.2) });
     gsap.set('.nav-photo', { opacity: Math.max(0, 1 - p * 1.6) });
+    gsap.set('.hero-bootlog', { opacity: Math.max(0, 1 - p * 2.6) });
+    // Glass furniture sinks away too — but only after it has revealed,
+    // so the scrub never clobbers the intro slide
+    if (heroRevealed) gsap.set(FURNITURE, { opacity: Math.max(0, 1 - p * 2.2) });
   },
 });
+
+/* ---------- Boot-log dots + floating nav + scroll-spy + photo tilt ---------- */
+function bootLog() {
+  const dots = document.querySelector('#heroBootlog .bl-dots');
+  if (!dots) return;
+  if (prefersReduced) { dots.textContent = '.'.repeat(20); return; }
+  let n = 0;
+  const iv = setInterval(() => {
+    dots.textContent = '.'.repeat(n++);
+    if (n > 22) clearInterval(iv);
+  }, 55);
+}
+
+const navEl = document.querySelector('.nav');
+lenis.on('scroll', ({ scroll }) => {
+  if (navEl) navEl.classList.toggle('scrolled', scroll > 48);
+});
+
+// Scroll-spy: light the nav link (emerald dot) for the section in view
+const navLinks = gsap.utils.toArray('.nav-links a');
+const spyIds = ['stats', 'pillars', 'projects', 'career', 'finale'];
+const spyObserver = new IntersectionObserver((entries) => {
+  entries.forEach((en) => {
+    if (!en.isIntersecting) return;
+    navLinks.forEach((a) => a.classList.remove('active'));
+    const link = document.querySelector(`.nav-links a[href="#${en.target.id}"]`);
+    if (link) link.classList.add('active');
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+spyIds.forEach((id) => { const el = document.getElementById(id); if (el) spyObserver.observe(el); });
+
+// Passport chip tilts 1–2° toward the cursor
+const navPhoto = document.querySelector('.nav-photo');
+if (navPhoto && !prefersReduced) {
+  window.addEventListener('pointermove', (e) => {
+    const nx = e.clientX / innerWidth - 0.5;
+    const ny = e.clientY / innerHeight - 0.5;
+    gsap.to(navPhoto, {
+      rotationY: nx * 4, rotationX: -ny * 4,
+      transformPerspective: 700, transformOrigin: 'center',
+      duration: 0.7, ease: 'power2.out',
+    });
+  }, { passive: true });
+}
+
+/* ---------- Cinematic camera: mouse parallax + slow drift ---------- */
+if (!prefersReduced) {
+  const cam = document.getElementById('heroCamera');
+  let tmx = 0, tmy = 0, cmx = 0, cmy = 0;
+  window.addEventListener('pointermove', (e) => {
+    tmx = e.clientX / innerWidth - 0.5;
+    tmy = e.clientY / innerHeight - 0.5;
+  }, { passive: true });
+  (function camDrift(now) {
+    cmx += (tmx - cmx) * 0.05;
+    cmy += (tmy - cmy) * 0.05;
+    const dx = Math.sin(now * 0.00006) * 3;   // 1–3px cinematic drift
+    const dy = Math.cos(now * 0.00008) * 2.4;
+    if (cam) cam.style.transform =
+      `translate3d(${(cmx * 10 + dx).toFixed(2)}px, ${(cmy * 9 + dy).toFixed(2)}px, 0)`;
+    requestAnimationFrame(camDrift);
+  })(0);
+}
 
 /* ================================================================
    STATS — count-up on enter
