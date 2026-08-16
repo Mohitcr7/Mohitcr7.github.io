@@ -330,7 +330,7 @@ body.no-frames .hero-sub { max-width: 520px; }
   padding: 0 4vw;
 }
 .hero-kicker {
-  font-size: clamp(8px, 0.82vw, 10px);
+  font-size: clamp(9px, 0.98vw, 12px);
   letter-spacing: 0.4em;
   color: var(--emerald);
   margin-bottom: 2.6vh;
@@ -428,7 +428,7 @@ body.no-frames .hero-sub { max-width: 520px; }
 .hero-certs {
   position: absolute;
   left: clamp(20px, 4vw, 56px);
-  bottom: 134px;
+  bottom: 96px; /* drops into the space the social icons vacated, 8px clear of the HUD bracket */
   z-index: 4;
   opacity: 0; /* revealed when the typewriter starts */
   font-size: 11px;
@@ -596,14 +596,15 @@ body.no-frames .hero-sub { max-width: 520px; }
 }
 .hero-bootlog .accent { color: var(--emerald); }
 
-/* Social icons — bottom-left, stacked above the HUD bracket */
+/* Social icons — bottom-right, stacked above the boot log so the right
+   rail counterweights the certifications terminal on the left */
 .hero-social {
   position: absolute; z-index: 5;
-  left: clamp(20px, 4vw, 56px); bottom: 96px;
-  display: flex; gap: 18px; align-items: center;
+  right: clamp(20px, 4vw, 56px); bottom: 84px;
+  display: flex; gap: 18px; align-items: center; justify-content: flex-end;
 }
 .hero-social a {
-  width: 20px; height: 20px;
+  width: 24px; height: 24px;
   color: rgba(242, 234, 217, 0.5);
   transition: color 0.3s ease, transform 0.3s ease;
 }
