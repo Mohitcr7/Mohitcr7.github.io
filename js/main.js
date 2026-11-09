@@ -236,13 +236,14 @@ if (!prefersReduced) {
 /* Counts wind up/down with scroll (scrubbed both directions) */
 gsap.utils.toArray('.count').forEach((el) => {
   const target = parseFloat(el.dataset.target);
+  const decimals = (el.dataset.target.split('.')[1] || '').length; // "2.35" counts as 0.00 → 2.35
   const suffix = el.dataset.suffix || '';
   ScrollTrigger.create({
     trigger: el,
     start: 'top 94%',
     end: 'top 55%',
     scrub: 0.4,
-    onUpdate: (self) => { el.textContent = Math.round(target * self.progress) + suffix; },
+    onUpdate: (self) => { el.textContent = (target * self.progress).toFixed(decimals) + suffix; },
   });
 });
 
